@@ -6,3 +6,5 @@ pandas
 numpy
 matplotlib
 scikit-learn
+netCDF4
+pymannkendall
