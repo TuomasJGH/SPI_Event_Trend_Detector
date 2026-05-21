@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+
+title: "SPI Event Trend Detector"
+
+message: >
+  If you use this software, please cite it using the metadata below.
+  A Zenodo DOI will be provided when available.
+
+type: software
+
+authors:
+  - given-names: "Tuomas"
+    family-names: "Haapala"
+    affiliation: "Aalto University"
+    email: "tuomas.haapala@aalto.fi"
+    orcid: "https://orcid.org/0009-0008-8431-6235"
+
+
+
+identifiers:
+  - type: url
+    value: "https://github.com/TuomasJGH/SPI_Event_Trend_Detector"
+    description: GitHub repository
+
+
+
+repository-code: "https://github.com/TuomasJGH/SPI_Event_Trend_Detector"
+
+url: "https://github.com/TuomasJGH/SPI_Event_Trend_Detector"
+
+abstract: >
+  This project detects trends in precipitation events based on the Standardized Precipitation Index and standard and modified Mann-Kendall trend tests.
+
+keywords:
+  - research
+  - open-science
+  - reproducibility
+
+license: "MIT"
+
+version: "0.1.0"
+
+date-released: "2026"
