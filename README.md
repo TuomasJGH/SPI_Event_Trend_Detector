@@ -7,7 +7,8 @@
 
 ## Project Overview
 This project detects trends in precipitation events based on the Standardized Precipitation Index and standard and modified Mann-Kendall trend tests.
-Breifly describe your research for anyone who finds this repository before reading your manuscript.* problem statement: why does your research matter
+.
+* problem statement: why does your research matter
 * problem statement: what overarching theoretical, applied, societal, environmental problem does your research address? 
 * challenge statement: why has this problem not been solved before?
 * solution statement: what specific element of the challenge does your research resolve?
@@ -20,12 +21,16 @@ Breifly describe your research for anyone who finds this repository before readi
 
 Describe your study area, and period of interest. Specify whether training data represents a different location/time period than forecast simulations. Detail the temporal and spatial frequency of your process.
 
-### Published Data Sources
-| Name | Source | Description | Access Method | data DOI/url | metadata DOI/URL| details | data citation |
-|------|--------|-------------|---------------|--------------|-----------------|---------|---------------|
+This project uses openly available gridded precipitation data provided by the Finnish Meteorological Institute. The data is in the form of NetCDF grid files, where each file contains a year's daily precipitation time series in each cell. Grid size is 1147*661, and values outside Finland are masked.
 
+Data is currently available for years 1961 to 2025, with updates adding data for the current year.  
+
+### Published Data Sources
+| Name | Source | Description | Access Method | URL | Details | Citation |
+|------|--------|-------------|---------------|--------------|---------|---------------|
+| rrday_(year).nc | Finnish Meteorological Institute | Yearly grids containing daily precipitation data for Finland | Direct access via URL | [URL](http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com/) | Spatial resolution: 1 km2, EPSG:3067 projection | Finnish Meteorological Institute. (2026) Daily observations in 1km*1km grid. Available from: [http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com](http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com) |
 ### Data Access Notes
-Many public geospatial data repositories require user authentication to access data. In the methods section, detail which data sources require registraton to access. Link to sign up portals for any listed data sources that require user authentication. In the "How to Reproduce," descripe how to configure automatic access control mechanisms for each data source. 
+In the "How to Reproduce," descripe how to configure automatic access control mechanisms for each data source. 
 
 ### Inputs folder
 Any direct data download links can be pasted into the "datalinks.txt" file in the inputs folder. Specify which dataset links can be accessed via the datalinks.txt folder. Note: this should only be used for PDIs: if the url changes, it will break the reproducibility of your workflow.
