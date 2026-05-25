@@ -42,30 +42,31 @@ This project uses openly available gridded precipitation data provided by the Fi
 The data is in the form of NetCDF grid files, where each file contains a year's daily precipitation time series in each cell. 
 Grid size is 1147*661, and values outside Finland are masked.
 
-Data is currently available for years 1961 to 2025, with updates adding data for the current year.
+Data is currently available for years 1961 to 2025, with new years appended as their data is available.
 
 ### Published Data Sources
 | Name | Source | Description | Access Method | URL | Details | Citation |
-|------|--------|-------------|---------------|--------------|---------|---------------|
+|------|--------|-------------|---------------|-----|---------|----------|
 | rrday_(year).nc | Finnish Meteorological Institute | Yearly grids containing daily precipitation data for Finland | Direct access via URL | [URL](http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com/) | Spatial resolution: 1 km2, EPSG:3067 projection | Finnish Meteorological Institute. (2026) Daily observations in 1km*1km grid. Available from: [http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com](http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com) |
 
 ### Data Access Notes
-In the "How to Reproduce," descripe how to configure automatic access control mechanisms for each data source. 
-
-### Inputs folder
-Any direct data download links can be pasted into the "datalinks.txt" file in the inputs folder. 
-Specify which dataset links can be accessed via the datalinks.txt folder. 
-Note: this should only be used for PDIs: if the url changes, it will break the reproducibility of your workflow.
-
-Detail any datasets that are in your inputs data folder. 
-Note this is only for data that is too small/trivial to be published: **no files greater than 10 MB can be stored in repository**. 
-Examples might include spatial polygons that have undergone geometry simplification for API searches, text-based keys mapping variable names to integer values, etc.
+Data access code is based on work by Porokhivnyk (2024).
+One year of precipitation data is roughly 1 GB in size - it is recommended to delete the NetCDF files once processed data and maps are available.
 
 ## Methods
 ### Data Processing - SE2
-Describe steps involved in data preprocessing
+Once the precipitation files are ready, the code processes each cell with two for loops of the NetCDF grid's shape.
+For each cell, the precipitation time series for every analysis year are combined and then formed into a daily time series of accumulation period precipitation sums.
+The SPI transformation is then applied, resulting in an array where each cell contains the SPI time series of its precipitation data.
+This array is then ravelled into a 1D .csv for saving.
+The discretisation step and the length of the analysis period in both days and years are saved in to a separate file.
+A list and a mask for date values during summer are also saved.
 
 ### Data Analysis - SE3
+The SPI map is read and reshaped to the original grid.
+With the set event thresholds, each event in the SPI time series where the values cross beyond the event thresholds during summer are recorded to yearly values by their length and number.
+
+Three different trend tests are then applied to the yearly value series for length and number: the Mann-Kendall trend test, the Hamed and Rao modified Mann-Kendall test, and the Yue and Wang modified Mann-Kendall trend test. These trend tests are used together to gain a thorough perspective on present SPI trends, and the tests are performed for event length and the average event length for both dry and wet events occurring during summer. Trend direction and slope are calculated. 
 
 ## Repository Structure
 
@@ -176,12 +177,13 @@ By contributing, you agree that your work will be released under the project’s
 
 ## References
 
-Finnish Meteorological Institute. 2026. Daily observations in 1km*1km grid. Available at:
+Finnish Meteorological Institute. (2026) Daily observations in 1km*1km grid. Available at:
 https://en.ilmatieteenlaitos.fi/gridded-observations-on-aws-s3
 
-McKee, T. B., Doesken, N. J., Kleist, J. 1993. The relationship of drought frequency and duration to time scales. 8th Conference on Applied Climatology, Anaheim, 17-22 January 1993.
+McKee, T. B., Doesken, N. J., Kleist, J. (1993) The relationship of drought frequency and duration to time scales. 8th Conference on Applied Climatology, Anaheim, 17-22 January 1993.
 
-Lloyd-Hughes, B., Saunders, M. A. 2002. A drought climatology for Europe. International Journal
+Lloyd-Hughes, B., Saunders, M. A. (2002) A drought climatology for Europe. International Journal
 of Climatology. https://doi.org/10.1002/joc.846
 
+Porokhivnyk, T. (2024) Automated computational tool for simulating field-scale agricultural hydrology and water management. Aalto University. Available at: https://aaltodoc.aalto.fi/items/ad5f0c49-16aa-4eb6-9f5a-123d86773082
 
