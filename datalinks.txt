@@ -1,0 +1,2 @@
+FMI open gridded meteorological data access URL
+http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com/
