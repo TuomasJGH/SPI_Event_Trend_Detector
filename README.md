@@ -22,39 +22,40 @@ Therefore, historical precipitation patterns and events should be analyzed for t
 ### Literature
 The Standardized Precipitation Index was developed by McKee et al. (1993), and it has since been widely used to analyze and distinguish changes in precipitation patterns. 
 The precise methodology used in this project is taken from research by Lloyd-Hughes and Saunders (2002), where the accumulation period is used to create a daily time series of precipitation sums for the preceding accumulation period. 
-This precipitation sum time series is then transformed into a standardized normal distribution using the gamma distribution - the SPI time series.
+This precipitation sum time series is then transformed into a standardized normal distribution using the gamma distribution, resulting in the SPI time series.
+The values in the series depict the deviation of the accumulation period -based precipitation sum from the mean of the time series. 
 
 SPI with different accumulation periods are noted as SPI-n, where n is the number of months included in the accumulation period, often in the range of 1 to 12. 
-SPI with shorter accumulation periods are better at describing short-term events, while longer accumulation periods describe long-term phenomena.
-
-In the daily SPI time series, the daily value depicts the deviation of the precipitation sum from the mean of the time series. 
+SPI with shorter accumulation periods are better at describing short-term events, while longer accumulation periods describe long-term phenomena. 
+In this project, SPI-1 is used as the default setting to focus on short-term changes that occur during the comparatively short growing season in Finland. 
 
 ### General research questions
 <ul>
   <li>How have SPI-based precipitation events changed in Finland during the last century?</li>
-  <li>Is there spatial autocorrelation present in the trend results?</li>
+  <li>Are there spatial concentrations present in the results?</li>
 </ul>    
 
 ## Data Sources
-Describe your study area, and period of interest. Specify whether training data represents a different location/time period than forecast simulations. Detail the temporal and spatial frequency of your process.
-
 This project uses openly available gridded precipitation data provided by the Finnish Meteorological Institute (FMI, 2026). 
 The data is in the form of NetCDF grid files, where each file contains a year's daily precipitation time series in each cell. 
 Grid size is 1147*661, and values outside Finland are masked.
 
 Data is currently available for years 1961 to 2025, with new years appended as their data is available.
 
-### Published Data Sources
+### Data Source Description
 | Name | Source | Description | Access Method | URL | Details | Citation |
 |------|--------|-------------|---------------|-----|---------|----------|
 | rrday_(year).nc | Finnish Meteorological Institute | Yearly grids containing daily precipitation data for Finland | Direct access via URL | [URL](http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com/) | Spatial resolution: 1 km2, EPSG:3067 projection | Finnish Meteorological Institute. (2026) Daily observations in 1km*1km grid. Available from: [http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com](http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com) |
 
-### Data Access Notes
+### Data Access Notes - SE1
 Data access code is based on work by Porokhivnyk (2024).
-One year of precipitation data is roughly 1 GB in size - it is recommended to delete the NetCDF files once processed data and maps are available.
+One year of precipitation data is roughly 1 GB in size - it is recommended to delete the NetCDF files once processed data and maps are available.  
+The analysis period is specified here.
 
 ## Methods
+
 ### Data Processing - SE2
+The discretisation step and accumulation period are specified here.  
 Once the precipitation files are ready, the code processes each cell with two for loops of the NetCDF grid's shape.
 For each cell, the precipitation time series for every analysis year are combined and then formed into a daily time series of accumulation period precipitation sums.
 The SPI transformation is then applied, resulting in an array where each cell contains the SPI time series of its precipitation data.
@@ -63,10 +64,11 @@ The discretisation step and the length of the analysis period in both days and y
 A list and a mask for date values during summer are also saved.
 
 ### Data Analysis - SE3
+The event start and end thresholds are specified here.  
 The SPI map is read and reshaped to the original grid.
 With the set event thresholds, each event in the SPI time series where the values cross beyond the event thresholds during summer are recorded to yearly values by their length and number.
 
-Three different trend tests are then applied to the yearly value series for length and number: the Mann-Kendall trend test, the Hamed and Rao modified Mann-Kendall test, and the Yue and Wang modified Mann-Kendall trend test. These trend tests are used together to gain a thorough perspective on present SPI trends, and the tests are performed for event length and the average event length for both dry and wet events occurring during summer. Trend direction and slope are calculated. 
+Three different trend tests are then applied to the yearly value series for length and number: the Mann-Kendall trend test, the Hamed and Rao modified Mann-Kendall test, and the Yue and Wang modified Mann-Kendall trend test. These trend tests are used together to gain a thorough perspective on present SPI trends, and the tests are performed for event length and the average event length for both dry and wet events occurring during summer. Trend direction and slope are calculated.
 
 ## Repository Structure
 
@@ -85,29 +87,18 @@ Three different trend tests are then applied to the yearly value series for leng
 ### Computational requirements
 The code is reproducible with the 'Xsmall (4 CPU, 8GB RAM)' setting of the DIWA DataLab.
 
-### Data access configurations
-Describe in detail any access control mechanisms that need to be configured for an individual user to access data (e.g. tokens, cookies, certificates, URL customization). Provide links to documentation.
-
-
 ### Inputs
 Project files are designed to be adjustable to account for user-specific inputs for the following key properties of SPI event trend analysis:
-<ul>
-  <li>Discretisation step</li>
-  <li>Accumulation period</li>
-  <li>Dry event thresholds</li>
-  <li>Wet event thresholds</li>
-  <li>Analysis years (minimum of three)</li>
-</ul>
 
-A set of default inputs was used to test and verify the function and reproducibility of the code. Sample figures are based on these inputs.
+| Input | Suggestions | Default |
+|-------|-------------|---------|
+| Discretisation step | 1, 10, 100 | 10 |
+| Accumulation period | 1 (30d) 3 (90d) 6 (180d) 12 (360d) |1 (30 days)|
+| Dry event thresholds | -4-0 | -1 |
+| Wet event thresholds | 0-4 | 1 |
+| Analysis years | 1961-2025 | 1999-2001 |
 
-<ul>
-  <li>Discretisation step: 10</li>
-  <li>Accumulation period: 1</li>
-  <li>Dry event thresholds: Start: -1, End: -1</li>
-  <li>Wet event thresholds: Start: 1, End: 1</li>
-  <li>Analysis years (minimum of three): 1999 - 2001</li>
-</ul>
+The default inputs were used to test the function and verify the reproducibility of the code.
 
 ### Run the code
 ```bash
@@ -123,8 +114,20 @@ The figures obtained with default inputs are presented here.
 |![test](figures/len_Ds.png)|![test](figures/len_Ds_trend_mk.png)|![test](figures/len_Ds_trend_hr.png)|![test](figures/len_Ds_trend_yw.png)|
 |![test](figures/nmb_Ds.png)|![test](figures/nmb_Ds_trend_mk.png)|![test](figures/nmb_Ds_trend_hr.png)|![test](figures/nmb_Ds_trend_yw.png)|
 |![test](figures/len_Ws.png)|![test](figures/len_Ws_trend_mk.png)|![test](figures/len_Ws_trend_hr.png)|![test](figures/len_Ws_trend_yw.png)|
-|![test](figures/nmb_Ds.png)|![test](figures/nmb_Ds_trend_mk.png)|![test](figures/nmb_Ds_trend_hr.png)|![test](figures/nmb_Ds_trend_yw.png)|
+|![test](figures/nmb_Ws.png)|![test](figures/nmb_Ws_trend_mk.png)|![test](figures/nmb_Ws_trend_hr.png)|![test](figures/nmb_Ws_trend_yw.png)|
 
+The event maps show that while there are spatial concentrations of SPI events across Finland, the locations may not correspond with event trend locations.
+For example, while a large number of dry events are present on the southwestern coast, signalling precarious conditions, they have not experienced significant change during the analysis period.
+The choice of trend test affects recorded event trends - with the default dataset, only the Yue and Wang modified Mann-Kendall trend test is able to distinguish significant trends in the dataset.
+The Mann-Kendall and Hamed and Rao modified trend tests have been able to detect trends for longer analysis periods, but they were not sensitive enough for the default inputs.  
+
+During the default analysis period of 1999-2001, no trends are present for the majority of Finland in terms of both events.
+However, dry event trends tend toward decreasing trends and wet events toward increasing trends, highlighting a general trend toward wetter conditions.
+Decreasing dry event length and increasing wet event number trends are present on the western coast, which is one of the more prominent agricultural regions in the country.
+
+Increasing the length of the analysis period allows for more robust and significant trends to be recorded for Finland.
+Long-term trends highlight how the precipitation in the region has responded to climate change.
+An openly available tool with variable inputs for location and event severity thresholds allows users and the agricultural sector to prepare accordingly for changes in available water resources.
 
 ## Citation
 Tuomas J. G. Haapala (2026).
