@@ -48,27 +48,35 @@ Data is currently available for years 1961 to 2025, with new years appended as t
 | rrday_(year).nc | Finnish Meteorological Institute | Yearly grids containing daily precipitation data for Finland | Direct access via URL | [URL](http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com/) | Spatial resolution: 1 km2, EPSG:3067 projection | Finnish Meteorological Institute. (2026) Daily observations in 1km*1km grid. Available from: [http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com](http://fmi-gridded-obs-daily-1km.s3-website-eu-west-1.amazonaws.com) |
 
 ### Data Access Notes - SE1
+The analysis period is specified here.  
 Data access code is based on work by Porokhivnyk (2024).
-One year of precipitation data is roughly 1 GB in size - it is recommended to delete the NetCDF files once processed data and maps are available.  
-The analysis period is specified here.
+One year of precipitation data is roughly 1 GB in size - it is recommended to check available storage space before download and remove the NetCDF files once processed data and maps are available.
 
 ## Methods
 
 ### Data Processing - SE2
 The discretisation step and accumulation period are specified here.  
 Once the precipitation files are ready, the code processes each cell with two for loops of the NetCDF grid's shape.
-For each cell, the precipitation time series for every analysis year are combined and then formed into a daily time series of accumulation period precipitation sums.
+For each cell, the precipitation time series for every analysis year are combined and then formed into a daily time series of accumulation period precipitation sums.  
 The SPI transformation is then applied, resulting in an array where each cell contains the SPI time series of its precipitation data.
 This array is then ravelled into a 1D .csv for saving.
 The discretisation step and the length of the analysis period in both days and years are saved in to a separate file.
-A list and a mask for date values during summer are also saved.
+A list and a mask for date values during summer are also saved. Note the file size of the ravelled SPI map. For the default inputs, the file is nearly 200 MB in size, and it is recommended to be saved externally or deleted to save storage space.
 
 ### Data Analysis - SE3
 The event start and end thresholds are specified here.  
 The SPI map is read and reshaped to the original grid.
-With the set event thresholds, each event in the SPI time series where the values cross beyond the event thresholds during summer are recorded to yearly values by their length and number.
+With the set event thresholds, each event in the SPI time series where the values cross beyond the event thresholds during summer are recorded to yearly values by their number and average length.
 
 Three different trend tests are then applied to the yearly value series for length and number: the Mann-Kendall trend test, the Hamed and Rao modified Mann-Kendall test, and the Yue and Wang modified Mann-Kendall trend test. These trend tests are used together to gain a thorough perspective on present SPI trends, and the tests are performed for event length and the average event length for both dry and wet events occurring during summer. Trend direction and slope are calculated.
+
+The following map arrays are saved for each event type:
+<ul>
+  <li>Event value for the year</li>
+  <li>Event value for the growing season (May to August)</li>
+  <li>Trends with the three trend tests</li>
+  <li>Slopes with the three trend tests</li>
+</ul>
 
 ## Repository Structure
 
@@ -81,6 +89,11 @@ Three different trend tests are then applied to the yearly value series for leng
 | figures/ | SE4 figure outputs |
 | run_reproducibility.py | Reproducibility wrapper |
 | CITATION.cff | Citation metadata |
+| LICENSE | MIT License|
+| README.md | README project description |
+| requirements.txt | Python libraries required in reproducing the project |
+| runtime.txt | |
+| update_requirements.sh | |
 
 ## Reproducibility
 
