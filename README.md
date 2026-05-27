@@ -29,13 +29,13 @@ SPI with different accumulation periods are noted as SPI-n, where n is the numbe
 SPI with shorter accumulation periods are better at describing short-term events, while longer accumulation periods describe long-term phenomena. 
 In this project, SPI-1 is used as the default setting to focus on short-term changes that occur during the comparatively short growing season in Finland. 
 
-### General research questions
+### Research questions
 <ul>
   <li>How have SPI-based precipitation events changed in Finland during the last century?</li>
   <li>Are there spatial concentrations present in the results?</li>
 </ul>    
 
-## Data Sources
+## Data Source
 This project uses openly available gridded precipitation data provided by the Finnish Meteorological Institute (FMI, 2026). 
 The data is in the form of NetCDF grid files, where each file contains a year's daily precipitation time series in each cell. 
 Grid size is 1147*661, and values outside Finland are masked.
@@ -68,7 +68,9 @@ The event start and end thresholds are specified here.
 The SPI map is read and reshaped to the original grid.
 With the set event thresholds, each event in the SPI time series where the values cross beyond the event thresholds during summer are recorded to yearly values by their number and average length.
 
-Three different trend tests are then applied to the yearly value series for length and number: the Mann-Kendall trend test, the Hamed and Rao modified Mann-Kendall test, and the Yue and Wang modified Mann-Kendall trend test. These trend tests are used together to gain a thorough perspective on present SPI trends, and the tests are performed for event length and the average event length for both dry and wet events occurring during summer. Trend direction and slope are calculated.
+Three different trend tests are then applied to the yearly value series for length and number: the Mann-Kendall trend test, the Hamed and Rao modified Mann-Kendall test, and the Yue and Wang modified Mann-Kendall trend test. 
+These trend tests are used together to gain a thorough perspective on present SPI trends, and the tests are performed for event length and the average event length for both dry and wet events occurring during the growing season/summer. 
+Trend direction and slope are calculated.
 
 The following map arrays are saved for each event type:
 <ul>
@@ -78,22 +80,28 @@ The following map arrays are saved for each event type:
   <li>Slopes with the three trend tests</li>
 </ul>
 
+Event value maps for the growing season and trend maps are visualized with SE4.
+
 ## Repository Structure
 
 | Folder / File | Description |
 |-------------|-------------|
-| notebooks_final/ | SE1–SE4 notebooks |
-| inputs/ | folder where SE1 uploads and which SE2 accesses for NetCDF input data |
+|.github/workflows| included with initial setup |
+| notebooks/ | SE1–SE4 notebooks |
+| inputs/ | folder where SE1 uploads and which SE2 accesses for NetCDF input data. Created during workflow |
 | processed_data/ | SE2 analysis-ready dataset outputs |
 | maps/ | SE3 map array outputs |
 | figures/ | SE4 figure outputs |
-| run_reproducibility.py | Reproducibility wrapper |
+|.gitignore| included with initial setup |
 | CITATION.cff | Citation metadata |
-| LICENSE | MIT License|
+| LICENSE | MIT License |
 | README.md | README project description |
+| datalinks.txt | URL for FMI open data access |
+| install.R | included with initial setup |
 | requirements.txt | Python libraries required in reproducing the project |
-| runtime.txt | |
-| update_requirements.sh | |
+| run_reproducibility.py | Reproducibility wrapper |
+| runtime.txt |  included with initial setup |
+| update_requirements.sh | included with initial setup |
 
 ## Reproducibility
 
@@ -103,13 +111,13 @@ The code is reproducible with the 'Xsmall (4 CPU, 8GB RAM)' setting of the DIWA 
 ### Inputs
 Project files are designed to be adjustable to account for user-specific inputs for the following key properties of SPI event trend analysis:
 
-| Input | Suggestions | Default |
-|-------|-------------|---------|
-| Discretisation step | 1, 10, 100 | 10 |
-| Accumulation period | 1 (30d) 3 (90d) 6 (180d) 12 (360d) |1 (30 days)|
-| Dry event thresholds | -4-0 | -1 |
-| Wet event thresholds | 0-4 | 1 |
-| Analysis years | 1961-2025 | 1999-2001 |
+| Input | Suggestions | Default | Standard Element location |
+|-------|-------------|---------| --------------------------|
+| Discretisation step | 1, 10, 100 | 10 | SE2 |
+| Accumulation period | 1 (30 days), 3 (90d), 6 (180d), 12 (360d), | 1 (30d) | SE2 |
+| Dry event thresholds | -4-0 | -1 | SE3 |
+| Wet event thresholds | 0-4 | 1 | SE3 |
+| Analysis years | 1961-2025 | 1999-2001 | SE1 |
 
 The default inputs were used to test the function and verify the reproducibility of the code.
 
@@ -120,7 +128,7 @@ python run_reproducibility.py
 ```
 
 ## Results
-The figures obtained with default inputs are presented here.
+The figures obtained with default inputs and their analysis are presented here.
 
 |  Event map  | Trends (Mann-Kendall) | Trends (Hamed and Rao) | Trends (Yue and Wang) |
 |-------------|-----------------------|------------------------|-----------------------|
@@ -144,7 +152,7 @@ An openly available tool with variable inputs for location and event severity th
 
 ## Citation
 Tuomas J. G. Haapala (2026).
-*SPI Event Trend Detector* (Version 1.0).
+*SPI Event Trend Detector* (Version 0.1.0).
 Aalto University.
 
 **BibTeX**
@@ -153,7 +161,7 @@ Aalto University.
   author = Tuomas Haapala,
   title = SPI Event Trend Detector,
   year = 2026,
-  version = 1.0,
+  version = 0.1.0,
   url = https://github.com/TuomasJGH/SPI_Event_Trend_Detector
 }
 ```
