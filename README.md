@@ -5,6 +5,8 @@
 **Organization:** Aalto University  
 **Website:** https://github.com/TuomasJGH/SPI_Event_Trend_Detector
 
+[![Binder](https://hub.diwatools.com/badge_logo.svg)](https://hub.diwatools.com/v2/gh/TuomasJGH/SPI_Event_Trend_Detector/HEAD)
+
 ## Project Overview
 This project detects trends in precipitation events based on the Standardized Precipitation Index and standard and modified Mann-Kendall trend tests.
 It is a representative first step in constructing a digital twin of Finnish agricultural conditions as software that accesses, adjusts and presents relevant meteorological hydrological data and analysis results based on user specifications.
