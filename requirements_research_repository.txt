@@ -1,0 +1,10 @@
+jupyterlab
+notebook
+nbconvert
+geopandas
+pandas
+numpy
+matplotlib
+scikit-learn
+netCDF4
+pymannkendall
